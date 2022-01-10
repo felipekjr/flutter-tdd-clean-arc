@@ -22,7 +22,7 @@ void main() {
     sut = GetStockPrice(httpClient);
   });
 
-  test('Should assure that the GetStockPrice passes correct values', () {
+  test('Should call HttpClient correct values', () {
     //arrange
     when(httpClient.request(url)).thenAnswer((_) async => {
           'code': faker.lorem.word(),
@@ -36,7 +36,7 @@ void main() {
     verify(httpClient.request(url));
   });
 
-  test('Should assure that the GetStockPrice return correct value on 200',
+  test('Should return StockEntity when HttpClient return 200',
       () async {
     final json = {
       'code': faker.lorem.word(),
@@ -53,7 +53,7 @@ void main() {
   });
 
   test(
-      'Should assure that the GetStockPrice throws unexpected when value is wrong',
+      'Should throws unexpected when HttpClient returns 200 with wrong value',
       () async {
     when(httpClient.request(url)).thenAnswer(
         (_) async => {'price_less': faker.randomGenerator.decimal()});
@@ -62,21 +62,21 @@ void main() {
   });
 
   test(
-      'Should assure that the GetStockPrice throws unexpected when internalError',
+      'Should throws unexpected when HttpClient return internalError',
       () async {
     when(httpClient.request(url)).thenThrow(HttpError.internalError);
 
     expect(sut.get(url), throwsA(DomainError.unexpected));
   });
 
-  test('Should assure that the GetStockPrice throws unexpected when badRequest',
+  test('Should throws unexpected when HttpClient return badRequest',
       () async {
     when(httpClient.request(url)).thenThrow(HttpError.badRequest);
 
     expect(sut.get(url), throwsA(DomainError.unexpected));
   });
 
-  test('Should assure that the GetStockPrice throws unexpected when notFound',
+  test('Should throws unexpected when HttpClient return notFound',
       () async {
     when(httpClient.request(url)).thenThrow(HttpError.notFound);
 
@@ -84,7 +84,7 @@ void main() {
   });
 
     test(
-      'Should assure that the GetStockPrice throws unauthorized when unauthorized',
+      'Should throws unauthorized when HttpClient return unauthorized',
       () async {
     when(httpClient.request(url)).thenThrow(HttpError.unauthorized);
 
